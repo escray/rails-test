@@ -50,7 +50,10 @@ RSpec.describe Parking, type: :model do
       t = Time.now
       parking = Parking.new(parking_type: 'guest', start_at: t, end_at: t + 120.minutes)
       parking.calculate_amount
+      test_process(1)
       expect(parking.amount).to eq(400)
     end
   end
+
+  def test_process(min); end
 end
