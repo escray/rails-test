@@ -1,0 +1,21 @@
+<h1>Full-Stack Parking Calculate</h1>
+<% if @parking.amount.present? %>
+  <p>
+    From <%= @parking.start_at %> To <%= @parking.end_at %>
+  </p>
+  <p>
+    During <%= @parking.duration %> minutes
+  </p>
+  <p>
+    Total <%= number_to_currency(@parking.amount.to_f / 100, :unit => "$") %>
+  </p>
+  <p>
+    <%= link_to "Continue", new_parking_path %>
+  </p>
+<% else %>
+  <%= form_for @parking do |f| %>
+    <p>
+      <%= f.submit "End" %>
+    </p>
+  <% end %>
+<% end %>
