@@ -19,41 +19,30 @@ RSpec.describe Parking, type: :model do
 
   describe '.calculate_amount' do
     it '30 min should be $2' do
-      t = Time.now
-      parking = Parking.new(parking_type: 'guest', start_at: t, end_at: t + 30.minutes)
-      parking.calculate_amount
-      expect(parking.amount).to eq(200)
+      test_process(30, 200)
     end
 
     it '60 min should be $2' do
-      t = Time.now
-      parking = Parking.new(parking_type: 'guest', start_at: t, end_at: t + 60.minutes)
-      parking.calculate_amount
-      expect(parking.amount).to eq(200)
+      test_process(60, 200)
     end
 
     it '61 min should be $3' do
-      t = Time.now
-      parking = Parking.new(parking_type: 'guest', start_at: t, end_at: t + 61.minutes)
-      parking.calculate_amount
-      expect(parking.amount).to eq(300)
+      test_process(61, 300)
     end
 
     it '90 min should be $3' do
-      t = Time.now
-      parking = Parking.new(parking_type: 'guest', start_at: t, end_at: t + 90.minutes)
-      parking.calculate_amount
-      expect(parking.amount).to eq(300)
+      test_process(90, 300)
     end
 
     it '120 min should be $4' do
-      t = Time.now
-      parking = Parking.new(parking_type: 'guest', start_at: t, end_at: t + 120.minutes)
-      parking.calculate_amount
-      test_process(1)
-      expect(parking.amount).to eq(400)
+      test_process(120, 400)
     end
   end
 
-  def test_process(min); end
+  def test_process(min, exp)
+    t = Time.now
+    parking = Parking.new(parking_type: 'guest', start_at: t, end_at: t + min.minutes)
+    parking.calculate_amount
+    expect(parking.amount).to eq(exp)
+  end
 end
