@@ -19,29 +19,56 @@ RSpec.describe Parking, type: :model do
 
   describe '.calculate_amount' do
     it '30 min should be $2' do
-      test_process(30, 200)
+      test_process('guest', 30, 200)
     end
 
     it '60 min should be $2' do
-      test_process(60, 200)
+      test_process('guest', 60, 200)
     end
 
     it '61 min should be $3' do
-      test_process(61, 300)
+      test_process('guest', 61, 300)
     end
 
     it '90 min should be $3' do
-      test_process(90, 300)
+      test_process('guest', 90, 300)
     end
 
     it '120 min should be $4' do
-      test_process(120, 400)
+      test_process('guest', 120, 400)
     end
   end
 
-  def test_process(min, exp)
+  context 'short-term' do
+    it '30 mins should be $2' do
+      test_process('short-term', 30, 200)
+    end
+
+    it '60 mins should be $2' do
+      test_process('short-term', 60, 200)
+    end
+
+    it '61 mins should be $2.5' do
+      test_process('short-term', 61, 250)
+    end
+
+    it '90 mins should be $2.5' do
+      test_process('short-term', 90, 250)
+    end
+
+    it '120 mins should be $3' do
+      test_process('short-term', 120, 300)
+    end
+  end
+
+  def test_process(type, min, exp)
     t = Time.now
-    parking = Parking.new(parking_type: 'guest', start_at: t, end_at: t + min.minutes)
+    parking = Parking.new(parking_type: type, start_at: t, end_at: t + min.minutes)
+
+    unless type == 'guest'
+      parking.user = User.create(email: 'test@example.com', password: '123456')
+    end
+
     parking.calculate_amount
     expect(parking.amount).to eq(exp)
   end

@@ -1,6 +1,9 @@
 <h1>Full-Stack Parking Calculate</h1>
 <% if @parking.amount.present? %>
   <p>
+    Rate Type: <%= @parking.parking_type %>
+  </p>
+  <p>
     From <%= @parking.start_at %> To <%= @parking.end_at %>
   </p>
   <p>

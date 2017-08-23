@@ -1,5 +1,11 @@
 <h1>Full-Stack Parking Calculate</h1>
 <%= form_for @parking do |f| %>
+  <% if current_user %>
+    <label><%= f.radio_button :parking_type, "short-term" %> Short Term</label>
+    <label><%= f.radio_button :parking_type, "long-term" %> Long Term </label>
+  <% else %>
+    Common Rate
+  <% end %>
   <p>
     <%= f.submit "Start" %>
   </p>

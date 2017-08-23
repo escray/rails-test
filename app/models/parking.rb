@@ -20,11 +20,13 @@ class Parking < ApplicationRecord
   end
 
   def calculate_amount
+    factor = user.present? ? 50 : 100
+
     if amount.blank? && start_at.present? && end_at.present?
       self.amount = if duration <= 60
                       200
                     else
-                      200 + ((duration - 60).to_f / 30).ceil * 100
+                      200 + ((duration - 60).to_f / 30).ceil * factor
                     end
     end
   end
