@@ -1,17 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Parking, type: :model do
+  before do
+    @time = Time.new(2017, 2, 21, 8, 0, 0)
+  end
+
   describe '.validate_end_at_with_amount' do
     it 'is invalid without amount' do
       parking = Parking.new(parking_type: 'guest',
-                            start_at: Time.now - 6.hours,
-                            end_at: Time.now)
+                            start_at: @time,
+                            end_at: @time + 6.hours)
       expect(parking).to_not be_valid
     end
 
     it 'is invalid without end_at' do
       parking = Parking.new(parking_type: 'guest',
-                            start_at: Time.now - 6.hours,
+                            start_at: @time,
                             amount: 999)
       expect(parking).to_not be_valid
     end
@@ -62,8 +66,7 @@ RSpec.describe Parking, type: :model do
   end
 
   def test_process(type, min, exp)
-    t = Time.now
-    parking = Parking.new(parking_type: type, start_at: t, end_at: t + min.minutes)
+    parking = Parking.new(parking_type: type, start_at: @time, end_at: @time + min.minutes)
 
     unless type == 'guest'
       parking.user = User.create(email: 'test@example.com', password: '123456')
