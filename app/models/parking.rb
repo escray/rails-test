@@ -20,14 +20,38 @@ class Parking < ApplicationRecord
   end
 
   def calculate_amount
+    # debug
+    # puts '---'
+    # puts parking_type
+    # puts '---'
+
     factor = user.present? ? 50 : 100
 
     if amount.blank? && start_at.present? && end_at.present?
-      self.amount = if duration <= 60
-                      200
-                    else
-                      200 + ((duration - 60).to_f / 30).ceil * factor
-                    end
+      if parking_type == 'long-term'
+        self.amount = calculate_long_term_amount
+      else
+        self.amount = if duration <= 60
+                        200
+                      else
+                        200 + ((duration - 60).to_f / 30).ceil * factor
+                      end
+      end
+    end
+  end
+
+  def calculate_long_term_amount
+    if amount.blank? && start_at.present? && end_at.present?
+      days = (duration / 1440).floor
+      min = duration % 1440
+
+      if min <= 360 && min > 0
+        days * 1600 + 1200
+      elsif min == 0
+        days * 1600
+      else
+        (days + 1) * 1600
+      end
     end
   end
 end

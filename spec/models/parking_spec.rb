@@ -22,6 +22,7 @@ RSpec.describe Parking, type: :model do
   end
 
   describe '.calculate_amount' do
+    # it '30 min should be $2', focus: true do
     it '30 min should be $2' do
       test_process('guest', 30, 200)
     end
@@ -62,6 +63,36 @@ RSpec.describe Parking, type: :model do
 
     it '120 mins should be $3' do
       test_process('short-term', 120, 300)
+    end
+  end
+
+  context 'long-term' do
+    it '30 mins should be $12' do
+      test_process('long-term', 30, 1200)
+    end
+
+    it '360 mins should be $12' do
+      test_process('long-term', 360, 1200)
+    end
+
+    it '361 mins should be $16' do
+      test_process('long-term', 361, 1600)
+    end
+
+    it '1440 mins should be $16' do
+      test_process('long-term', 1440, 1600)
+    end
+
+    it '1441 mins should be $28' do
+      test_process('long-term', 1441, 2800)
+    end
+
+    it '1800 mins should be $28' do
+      test_process('long-term', 1800, 2800)
+    end
+
+    it '1801 mins should be $32' do
+      test_process('long-term', 1801, 3200)
     end
   end
 
